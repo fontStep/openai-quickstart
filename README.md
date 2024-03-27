@@ -1,0 +1,2 @@
+# openai-quickstart
+openai-note

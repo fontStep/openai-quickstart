@@ -9,10 +9,12 @@ from utils import LOG
 from openai import OpenAI
 
 class OpenAIModel(Model):
-    def __init__(self, model: str, api_key: str,base_url: str = None):
+    def __init__(self, model: str, api_key: str=None,base_url: str = None):
         self.model = model
+        # LOG.info(f"Using OpenAI model: {os.getenv("OPENAI_API_KEY")}")
         api_key_args = api_key if api_key else os.getenv("OPENAI_API_KEY")
         base_url_args = base_url if base_url else os.getenv("OPENAI_BASE_URL")
+        LOG.info(f"Using OpenAI API key: {api_key_args},base_url_args:{base_url_args}")
         self.client = OpenAI(api_key=api_key_args,base_url=base_url_args)
 
     def make_request(self, prompt):

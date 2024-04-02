@@ -23,16 +23,18 @@ class PDFParser:
 
             for pdf_page in pages_to_parse:
                 page = Page()
-
                 # Store the original text content
-                raw_text = pdf_page.extract_text(layout=True)
+                raw_text = pdf_page.extract_text()
+                # LOG.debug(f"[raw_text]\n {raw_text}")
                 tables = pdf_page.extract_tables()
+                LOG.debug(f"[raw_text]\n {raw_text}")
 
                 # Remove each cell's content from the original text
                 for table_data in tables:
                     for row in table_data:
                         for cell in row:
-                            raw_text = raw_text.replace(cell, "", 1)
+                            if cell:
+                                raw_text = raw_text.replace(cell, "", 1)
 
                 # Handling text
                 if raw_text:

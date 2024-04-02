@@ -8,6 +8,8 @@ import sys
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+current_directory = os.path.dirname(__file__)
+
 from utils import ArgumentParser, ConfigLoader, LOG
 from model import GLMModel, OpenAIModel
 from translator import PDFTranslator
@@ -32,7 +34,11 @@ def translator(pdf_file,model_type,open_ai_key,target_language,output_format,mod
     
     file_name = os.path.basename(pdf_file_path)
     
-    output_file_path = os.path.join( os.path.dirname(os.getcwd()),'tests', file_name.replace('.pdf', f'_translated.pdf'))
+    output_file_name  = file_name.replace('.pdf', f'_translated.pdf')
+    
+    # LOG.info(f'文件名：{file.filename}')
+    output_file_path = os.path.join( os.path.dirname(current_directory),"tests",output_file_name )
+    
     
     #翻译后的输出格式
     file_format = output_format

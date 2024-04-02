@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件上传解析下载示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            width: 180px;
+            margin-right: 10px;
+            font-weight: bold;
+            text-align: right;
+        }
+        input[type="file"],
+        input[type="text"],
+        select {
+            width: 200px;
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        input[type="button"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 150px;
+            margin: 10px auto;
+        }
+        input[type="button"]:hover {
+            background-color: #0056b3;
+        }
+        #downloadLink {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        #downloadLink a {
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        #downloadLink a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>翻译PDF文件</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="form-group">
+                <label for="file">上传PDF文件：</label>
+                <input type="file" name="file" id="file">
+            </div>
+            <div class="form-group">
+                <label for="model_type">模型类型：</label>
+                <select id='model_type' name="model_type">
+                    <option value="OpenAIModel" selected>OpenAIModel</option>
+                    <option value="GLMModel">GLMModel</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="model_name">模型名称：</label>
+                <select id='model_name' name="model_name">
+                    <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="open_ai_key">openai api key：</label>
+                <input type="text" name="open_ai_key" id="open_ai_key">
+            </div>
+            <div class="form-group">
+                <label for="target_language">目标语言：</label>
+                <select id='target_language' name="target_language">
+                    <option value="Chinese" selected>Chinese</option>
+                    <option value="English">English</option>
+                    <option value="Japanese">Japanese</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="output_format">output_format：</label>
+                <select id='output_format' name="output_format">
+                    <option value="PDF" selected>PDF</option>
+                    <option value="markdown">markdown</option>
+                </select>
+            </div>
+            <input type="button" value="提交" onclick="uploadFile()">
+        </form>
+        <div id="downloadLink">
+            <a href="#" id="downloadAnchor">下载文件</a>
+        </div>
+    </div>
+</body>
+
+<script>
+    // 文件上传函数
+    function uploadFile() {
+        var form = document.getElementById('uploadForm');
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload', true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // 解析服务器返回的 JSON 响应
+                var response = JSON.parse(xhr.responseText);
+                console.log('response', response);
+                var file_name = response.file_name;
+
+                // 显示下载链接
+                var downloadLink = document.getElementById('downloadLink');
+                downloadLink.style.display = 'block';
+                var downloadAnchor = document.getElementById('downloadAnchor');
+                downloadAnchor.href = '/download/' + file_name;
+            } else {
+                alert('文件上传失败！');
+            }
+        };
+        var formData = new FormData(form);
+        xhr.send(formData);
+    }
+</script>
+</html>

@@ -25,7 +25,7 @@ class PDFParser:
                 page = Page()
 
                 # Store the original text content
-                raw_text = pdf_page.extract_text()
+                raw_text = pdf_page.extract_text(layout=True)
                 tables = pdf_page.extract_tables()
 
                 # Remove each cell's content from the original text

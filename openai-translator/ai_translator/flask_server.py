@@ -37,7 +37,13 @@ def upload_file():
     if file.filename == '':
         return render_template('index.html', message='未选择文件！')
     
-    output_file_name  = file.filename.replace('.pdf', f'_translated.pdf')
+    output_format=request.form.get('output_format')
+    
+    if output_format == 'PDF':
+       output_file_name  = file.filename.replace('.pdf', f'_translated.pdf')
+    if output_format == 'Markdown':
+       output_file_name  = file.filename.replace('.pdf', f'_translated.md') 
+   
     
     # LOG.info(f'文件名：{file.filename}')
     output_file_path = os.path.join( os.path.dirname(current_directory),app.config['STORE_FOLDER'],output_file_name )

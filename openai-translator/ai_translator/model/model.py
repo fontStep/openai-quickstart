@@ -10,8 +10,8 @@ class Model:
             ensuring that the translation is colloquial and authentic.   
             Only give me the output and nothing else.   
             Do not wrap responses in  double quotes.
-            Return in original format.\n  
-            "{text}"  
+            Return in original format.\n\n  
+            "{text}"
             """ 
         return prompt
 
@@ -26,7 +26,8 @@ class Model:
             Do not wrap responses in double quotes.
             Return in original format.  
             The contents of each column are separated by commas, and the contents of each row are separated by newlines.
-            "{table}"  
+            \n\n
+            "{table}"
             """
         return prompt
 

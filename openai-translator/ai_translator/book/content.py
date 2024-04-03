@@ -46,11 +46,11 @@ class TableContent(Content):
             if not isinstance(translation, str):
                 raise ValueError(f"Invalid translation type. Expected str, but got {type(translation)}")
 
-            LOG.debug('\n',translation)
-
+          
             # 按行分割数据
             lines = translation.strip().split('\n')
-            table_data = [line.split(',') for line in lines[1:]]
+            LOG.info('lines: ',lines)
+            table_data = [line.split(',') for line in lines[0:]]
             LOG.debug(table_data)
             # Create a DataFrame from the table_data
             translated_df = pd.DataFrame(table_data[1:], columns=table_data[0])

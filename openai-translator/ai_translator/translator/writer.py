@@ -9,6 +9,9 @@ from reportlab.platypus import (
 
 from book import Book, ContentType
 from utils import LOG
+import pandas as pd
+
+current_dir = os.path.dirname(__file__)
 
 class Writer:
     def __init__(self):
@@ -28,9 +31,10 @@ class Writer:
 
         LOG.info(f"pdf_file_path: {book.pdf_file_path}")
         LOG.info(f"开始翻译: {output_file_path}")
+        # LOG.debug(os.path.dirname(os.path.dirname(current_dir)))
 
         # Register Chinese font
-        font_path = "../fonts/simsun.ttc"  # 请将此路径替换为您的字体文件路径
+        font_path = os.path.join(os.path.dirname(os.path.dirname(current_dir)),"fonts","simsun.ttc")  # 请将此路径替换为您的字体文件路径
         pdfmetrics.registerFont(TTFont("SimSun", font_path))
 
         # Create a new ParagraphStyle with the SimSun font
@@ -54,6 +58,9 @@ class Writer:
                     elif content.content_type == ContentType.TABLE:
                         # Add table to the PDF
                         table = content.translation
+                        LOG.debug(table)
+                        LOG.debug(table.columns.tolist())
+                        LOG.debug(table.values.tolist())
                         table_style = TableStyle([
                             ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -65,6 +72,13 @@ class Writer:
                             ('FONTNAME', (0, 1), (-1, -1), 'SimSun'),  # 更改表格中的字体为 "SimSun"
                             ('GRID', (0, 0), (-1, -1), 1, colors.black)
                         ])
+                        # 将表头作为新的一行添加到DataFrame中
+                        new_row = table.columns.tolist()
+                        table = table.append(pd.Series(new_row, index=table.columns), ignore_index=True)
+
+                        # 将新行移动到第一行
+                        table = table.iloc[[-1]].append(table.iloc[:-1], ignore_index=True)
+                        
                         pdf_table = Table(table.values.tolist())
                         pdf_table.setStyle(table_style)
                         story.append(pdf_table)
@@ -90,7 +104,11 @@ class Writer:
                         if content.content_type == ContentType.TEXT:
                             # Add translated text to the Markdown file
                             text = content.translation
-                            output_file.write(text + '\n\n')
+                            # 将文本按行分割成列表
+                            lines = text.split("\n")
+                            # 在每行末尾增加换行符
+                            formatted_text = "\n".join([line + "\n" for line in lines])
+                            output_file.write(formatted_text + '\n\n')
 
                         elif content.content_type == ContentType.TABLE:
                             # Add table to the Markdown file

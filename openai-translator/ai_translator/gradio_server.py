@@ -33,11 +33,14 @@ def translator(pdf_file,model_type,open_ai_key,target_language,output_format,mod
     pdf_file_path = pdf_file.name
     
     file_name = os.path.basename(pdf_file_path)
-    
-    output_file_name  = file_name.replace('.pdf', f'_translated.pdf')
-    
+
+    if output_format == 'PDF':
+       output_file_name  = file_name.replace('.pdf', f'_translated.pdf')
+    if output_format == 'Markdown':
+       output_file_name  = file_name.replace('.pdf', f'_translated.md') 
+       
     # LOG.info(f'文件名：{file.filename}')
-    output_file_path = os.path.join( os.path.dirname(current_directory),"tests",output_file_name )
+    output_file_path = os.path.join( os.path.dirname(current_directory),"tests" ,output_file_name)
     
     
     #翻译后的输出格式
@@ -63,7 +66,7 @@ def create_translation_interface():
                     target_language = gr.Dropdown(["Chinese", "English", "Japanese"], label="target language",value='English')
                 with gr.Row():
                     
-                    output_format = gr.Dropdown(["PDF", "markdown"], label="Output file format", value = "PDF")
+                    output_format = gr.Dropdown(["PDF", "Markdown"], label="Output file format", value = "PDF")
                     submit = gr.Button("Submit")
                     submit.click(
                         translator, 

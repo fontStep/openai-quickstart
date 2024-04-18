@@ -1,0 +1,28 @@
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from utils import ArgumentParser, LOG
+from translator import PDFTranslator, TranslationConfig
+
+if __name__ == "__main__":
+    # 解析命令行
+    argument_parser = ArgumentParser()
+    args = argument_parser.parse_arguments()
+    
+    # LOG.info(f"Translating {args.source_language} to {args.target_language}")
+
+    # 初始化配置单例
+    config = TranslationConfig()
+    config.initialize(args)
+     
+
+    # 实例化 PDFTranslator 类，并调用 translate_pdf() 方法
+    translator = PDFTranslator(config.model_name)
+    translator.translate_pdf(input_file=config.input_file, 
+                             output_file_format=config.output_file_format, 
+                             source_language=config.source_language,
+                             target_language=config.target_language,
+                             pages=None
+                             )

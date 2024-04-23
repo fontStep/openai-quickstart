@@ -62,7 +62,7 @@ class TableContent(Content):
             # # Create a DataFrame using the extracted header and data
             # translated_df = pd.DataFrame(data_rows, columns=header)
             # 去除首尾的方括号，并按空格分割成列表
-            data_list = translation.strip("[]").split("] [")
+            data_list = translation.replace("【", "[").replace("】", "]").strip("[]").split("] [")
             # 将每个元素再按逗号分割成子列表
             data_list = [item.replace("，", ",").replace("、", ",").split(",") for item in data_list]
             # data_list = [item.split(",，、") for item in data_list]

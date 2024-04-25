@@ -16,7 +16,7 @@ class PDFTranslator:
                     source_language: str = "English",
                     target_language: str = 'Chinese',
                     pages: Optional[int] = None,
-                    translation_style: str = 'novel'
+                    translation_style: str = 'normal'
                     ):
         
         self.book = self.pdf_parser.parse_pdf(input_file, pages)

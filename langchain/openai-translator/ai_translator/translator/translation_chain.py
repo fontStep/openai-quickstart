@@ -10,6 +10,8 @@ from langchain.prompts.chat import (
 
 from translator.cutsom_chatglm import CutsomChatGLM3
 
+import os
+
 from utils import LOG
 
 class TranslationChain:
@@ -39,10 +41,16 @@ class TranslationChain:
         if(model_name.find('gpt')!=-1):
             chat = ChatOpenAI(model_name=model_name, temperature=0, verbose=verbose)
         else:
-            chat = CutsomChatGLM3(
-            endpoint_url="https://open.bigmodel.cn/api/paas/v4/chat/completions",
-            max_tokens=1024,
-            model_name=model_name
+            # chat = CutsomChatGLM3(
+            # endpoint_url="https://open.bigmodel.cn/api/paas/v4/chat/completions",
+            # max_tokens=1024,
+            # model_name=model_name
+            # )
+            chat = ChatOpenAI(
+                temperature=0.01,
+                model=model_name,
+                openai_api_key=os.getenv("ZHIPUAI_API_KEY"),
+                openai_api_base="https://open.bigmodel.cn/api/paas/v4/"
             )
             # chat = CustomChatZhipuAI(model_name=model_name,temperature=0,verbose=True)
         

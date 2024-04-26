@@ -5,6 +5,7 @@ from cutsom_chatglm import CutsomChatGLM3
 from langchain_community.llms import ChatGLM
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
+from langchain_openai import ChatOpenAI
 import os
 
 if __name__ == "__main__":
@@ -38,10 +39,11 @@ if __name__ == "__main__":
 
         print("model_name",model_name)
 
-        llm = CutsomChatGLM3(
-            endpoint_url=endpoint_url,
-            max_tokens=2000,
-            model_name=model_name,
+        llm = ChatOpenAI(
+        temperature=0.95,
+        model="glm-4",
+        openai_api_key=os.getenv("ZHIPUAI_API_KEY"),
+        openai_api_base="https://open.bigmodel.cn/api/paas/v4/"
         )
         # chat = ChatZhipuAI(model_name=model_name, temperature=0, verbose=verbose)
                     
